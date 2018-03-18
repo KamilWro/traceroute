@@ -1,8 +1,6 @@
-/*
- * Kamil Breczko
- * nr. indeksu: 280990
- */
-#include <netinet/ip_icmp.h>
+/* Kamil Breczko (280 990) */
+
+
 #include "sender.h"
 
 Sender::Sender(u_int16_t pid, const char *ip_addr, int sockfd) : pid(pid), ip_addr(ip_addr), sockfd(sockfd) {}
@@ -16,10 +14,14 @@ void Sender::send_packet(int ttl, u_int16_t sequence) {
     recipient.sin_family = AF_INET;
     inet_pton(AF_INET, ip_addr, &recipient.sin_addr);
 
-    setsockopt(sockfd, IPPROTO_IP, IP_TTL, &ttl, sizeof(int));
+    int set_ttl = setsockopt(sockfd, IPPROTO_IP, IP_TTL, &ttl, sizeof(int));
+    if (set_ttl < 0)
+        throw std::invalid_argument(std::string("setsockopt error: ") + strerror(errno));
+
     ssize_t bytes_sent = sendto(sockfd, &icmphdr, sizeof(icmphdr), 0, (struct sockaddr *) &recipient,
                                 sizeof(recipient));
-    assert(bytes_sent > 0);
+    if (bytes_sent <= 0)
+        throw std::runtime_error("sento error: packet was not sent");
 }
 
 struct icmphdr Sender::create_icmphdr(u_int16_t sequence) {
@@ -34,9 +36,11 @@ struct icmphdr Sender::create_icmphdr(u_int16_t sequence) {
 }
 
 u_int16_t Sender::compute_icmp_checksum(const void *buff, int length) {
+    if (length % 2 != 0)
+        throw std::invalid_argument("checksum error: size of struct % 2 != 0");
+
     u_int32_t sum;
     const u_int16_t *ptr = static_cast<const u_int16_t *>(buff);
-    assert (length % 2 == 0);
 
     for (sum = 0; length > 0; length -= 2)
         sum += *ptr++;

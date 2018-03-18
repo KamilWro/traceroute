@@ -1,7 +1,4 @@
-/*
- * Kamil Breczko
- * nr. indeksu: 280990
- */
+/* Kamil Breczko (280 990) */
 
 #ifndef SENDER_H
 #define SENDER_H
@@ -10,8 +7,8 @@
 #include <netinet/in.h>
 #include <arpa/inet.h>
 #include <sys/types.h>
-#include <assert.h>
 #include <memory.h>
+#include <stdexcept>
 
 class Sender {
   private:

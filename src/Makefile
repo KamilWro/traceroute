@@ -3,20 +3,20 @@
 CXXFLAGS = -std=c++11 -Werror -Wall
 CXX = g++
 
-traceroute : traceroute.o receiver.o utils.o sender.o packet.h
-	$(CXX) $(CXXFLAGS) -o traceroute traceroute.o receiver.o utils.o sender.o 
+main : packet.h main.o traceroute.o receiver.o sender.o
+	$(CXX) $(CXXFLAGS) -o traceroute main.o traceroute.o receiver.o sender.o
 
-traceroute.o : traceroute.cpp receiver.o utils.o sender.o
-	$(CXX) -c $(CXXFLAGS) traceroute.cpp -o  traceroute.o
+main.o : main.cpp traceroute.o
+	$(CXX) -c $(CXXFLAGS) main.cpp -o  main.o
 
-receiver.o : receiver.cpp receiver.h sender.o packet.h
+traceroute.o : traceroute.h traceroute.cpp packet.h receiver.o sender.o
+	$(CXX) -c $(CXXFLAGS) traceroute.cpp -o traceroute.o
+
+receiver.o : receiver.cpp receiver.h packet.h
 	$(CXX) -c $(CXXFLAGS) receiver.cpp -o receiver.o
 
 sender.o : sender.cpp sender.h
 	$(CXX) -c $(CXXFLAGS) sender.cpp -o sender.o
-
-utils.o : utils.cpp utils.h packet.h
-	$(CXX) -c $(CXXFLAGS) utils.cpp -o utils.o
 
 clean:
 	rm -rf *.o
