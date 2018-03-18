@@ -31,8 +31,8 @@ struct packet Receiver::receive_packet() {
         id = icmp_header->un.echo.id;
     }
 
-        /* pole TTL osiagnelo wartosc 0 */
-    else if (icmp_header->type == ICMP_TIME_EXCEEDED) {
+    /* pole TTL osiagnelo wartosc 0 */
+    if (icmp_header->type == ICMP_TIME_EXCEEDED) {
         icmp *sent_icmp_header = get_sent_icmp_header(icmp_packet);
 
         sequence = sent_icmp_header->icmp_seq;

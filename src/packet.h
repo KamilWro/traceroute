@@ -5,7 +5,6 @@
 
 #include <chrono>
 #include <string>
-#include <zconf.h>
 
 typedef std::chrono::high_resolution_clock::time_point time_point;
 

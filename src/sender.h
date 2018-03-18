@@ -6,8 +6,7 @@
 #include <netinet/ip_icmp.h>
 #include <netinet/in.h>
 #include <arpa/inet.h>
-#include <sys/types.h>
-#include <memory.h>
+#include <string.h>
 #include <stdexcept>
 
 class Sender {

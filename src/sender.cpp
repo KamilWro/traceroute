@@ -1,6 +1,5 @@
 /* Kamil Breczko (280 990) */
 
-
 #include "sender.h"
 
 Sender::Sender(u_int16_t pid, const char *ip_addr, int sockfd) : pid(pid), ip_addr(ip_addr), sockfd(sockfd) {}

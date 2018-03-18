@@ -6,8 +6,8 @@
 #include <netinet/in.h>
 #include <netinet/ip_icmp.h>
 #include <arpa/inet.h>
-#include <cstring>
 #include <stdexcept>
+#include <string.h>
 
 #include "packet.h"
 

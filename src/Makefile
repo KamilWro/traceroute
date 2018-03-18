@@ -1,6 +1,7 @@
 # Kamil Breczko (280 990)
 
-CXXFLAGS = -std=c++11 -Werror -Wall
+CXXFLAGS = -std=c++11 -Werror -Wall -Wextra
+
 CXX = g++
 
 main : packet.h main.o traceroute.o receiver.o sender.o

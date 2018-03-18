@@ -1,6 +1,7 @@
 /* Kamil Breczko (280 990) */
 
 #include "traceroute.h"
+#include <unistd.h>
 
 int main(int argc, const char *argv[]) {
     if (argc != 2) {
