@@ -7,6 +7,7 @@
 #include <set>
 #include <stdexcept>
 #include <memory>
+#include <unistd.h>
 
 #include "sender_icmp.h"
 #include "receiver_icmp.h"
@@ -25,6 +26,8 @@ class Traceroute {
     int sockfd;
   public:
     Traceroute(int pid);
+
+    virtual ~Traceroute();
 
     void run(const char *ip_address, shared_ptr<Sender> sender, shared_ptr<Receiver> receiver);
 

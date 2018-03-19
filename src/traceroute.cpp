@@ -1,5 +1,6 @@
 /* Kamil Breczko (280 990) */
 
+
 #include "traceroute.h"
 
 Traceroute::Traceroute(int pid) : pid(pid) {
@@ -83,4 +84,8 @@ void Traceroute::print_route(u_int16_t ttl, vector<struct packet> received_packe
         sum_time += std::chrono::duration_cast<std::chrono::milliseconds>(packet.receipt_time - sending_time).count();
 
     printf("%ums \n", sum_time / 3);
+}
+
+Traceroute::~Traceroute() {
+    close(sockfd);
 }
