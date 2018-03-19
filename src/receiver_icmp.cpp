@@ -1,8 +1,8 @@
 /* Kamil Breczko (280 990) */
 
-#include "receiver.h"
+#include "receiver_icmp.h"
 
-struct packet Receiver::receive_packet() {
+struct packet Receiver_icmp::receive_packet() {
     struct sockaddr_in sender;
     socklen_t sender_len = sizeof(sender);
     u_int8_t buffer[IP_MAXPACKET + 1];
@@ -42,14 +42,11 @@ struct packet Receiver::receive_packet() {
     return packet(id, sequence, sender_ip_str, receipt_time);
 }
 
-
 /* wyciagniecie wyslanego przez nas pakietu z naglowka ICMP */
-struct icmp *Receiver::get_sent_icmp_header(u_int8_t *icmp_packet) const {
+struct icmp *Receiver_icmp::get_sent_icmp_header(u_int8_t *icmp_packet) const {
     u_int8_t *sent_ip_packet = icmp_packet + 8;
     struct ip *sent_ip_header = (struct ip *) sent_ip_packet;
     u_int8_t *sent_icmp_packet = sent_ip_packet + sent_ip_header->ip_hl * 4;
     struct icmp *sent_icmp_header = (struct icmp *) sent_icmp_packet;
     return sent_icmp_header;
 }
-
-Receiver::Receiver(int sockfd) : sockfd(sockfd) {}

@@ -1,30 +1,32 @@
 /* Kamil Breczko (280 990) */
 
-#ifndef SENDER_H
-#define SENDER_H
+#ifndef TRACEROUTE_SENDER_H
+#define TRACEROUTE_SENDER_H
 
-#include <netinet/ip_icmp.h>
-#include <netinet/in.h>
-#include <arpa/inet.h>
-#include <string.h>
-#include <stdexcept>
+#include <string>
 
 class Sender {
-  private:
+  protected:
     u_int16_t pid;
     const char *ip_addr;
     int sockfd;
-
-    u_int16_t compute_icmp_checksum(const void *buff, int length);
-
-    struct icmphdr create_icmphdr(u_int16_t sequence);
-
   public:
+    virtual void send_packet(int ttl, u_int16_t sequence) = 0;
 
-    Sender(u_int16_t pid, const char *ip_addr, int sockfd);
+    virtual ~Sender() {}
 
-    void send_packet(int ttl, u_int16_t sequence);
+    void set_pid(u_int16_t pid) {
+        Sender::pid = pid;
+    }
+
+    void set_ip_addr(const char *ip_addr) {
+        Sender::ip_addr = ip_addr;
+    }
+
+    void set_sockfd(int sockfd) {
+        Sender::sockfd = sockfd;
+    }
 };
 
 
-#endif
+#endif //TRACEROUTE_SENDER_H

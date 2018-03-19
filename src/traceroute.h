@@ -6,9 +6,10 @@
 #include <vector>
 #include <set>
 #include <stdexcept>
+#include <memory>
 
-#include "sender.h"
-#include "receiver.h"
+#include "sender_icmp.h"
+#include "receiver_icmp.h"
 
 #define MAX_TTL 30
 #define MAX_PACKET_PER_TTL 3
@@ -25,9 +26,7 @@ class Traceroute {
   public:
     Traceroute(int pid);
 
-    void run(const char *ip_address);
-
-    void validate(const char *ip_address);
+    void run(const char *ip_address, shared_ptr<Sender> sender, shared_ptr<Receiver> receiver);
 
     void print_route(u_int16_t ttl, vector<struct packet> received_packets, time_point point);
 };

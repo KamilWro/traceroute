@@ -1,27 +1,22 @@
 /* Kamil Breczko (280 990) */
 
-#ifndef RECEIVER_H
-#define RECEIVER_H
+#ifndef TRACEROUTE_RECEIVER_H
+#define TRACEROUTE_RECEIVER_H
 
-#include <netinet/in.h>
-#include <netinet/ip_icmp.h>
-#include <arpa/inet.h>
-#include <stdexcept>
-#include <string.h>
-
-#include "packet.h"
 
 class Receiver {
-  private:
+  protected:
     int sockfd;
-
-    struct icmp *get_sent_icmp_header(u_int8_t *icmp_packet) const;
-
   public:
-    Receiver(int sockfd);
+    virtual struct packet receive_packet()=0;
 
-    struct packet receive_packet();
+    virtual ~Receiver() {}
+
+    void set_sockfd(int sockfd) {
+        Receiver::sockfd = sockfd;
+    }
+
 };
 
 
-#endif
+#endif //TRACEROUTE_RECEIVER_H
