@@ -16,15 +16,15 @@ class Sender {
     virtual ~Sender() {}
 
     void set_pid(u_int16_t pid) {
-        Sender::pid = pid;
+        this->pid = pid;
     }
 
-    void set_ip_addr(const char *ip_addr) {
-        Sender::ip_addr = ip_addr;
+    void setIp_addr(const char *ip_addr) {
+        this->ip_addr = ip_addr;
     }
 
-    void set_sockfd(int sockfd) {
-        Sender::sockfd = sockfd;
+    void setSockfd(int sockfd) {
+        this->sockfd = sockfd;
     }
 };
 

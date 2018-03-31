@@ -33,7 +33,7 @@ struct packet Receiver_icmp::receive_packet() {
 
     /* pole TTL osiagnelo wartosc 0 */
     if (icmp_header->type == ICMP_TIME_EXCEEDED) {
-        icmp *sent_icmp_header = get_sent_icmp_header(icmp_packet);
+        icmp *sent_icmp_header = getSent_icmp_header(icmp_packet);
 
         sequence = sent_icmp_header->icmp_seq;
         id = sent_icmp_header->icmp_id;
@@ -43,7 +43,7 @@ struct packet Receiver_icmp::receive_packet() {
 }
 
 /* wyciagniecie wyslanego przez nas pakietu z naglowka ICMP */
-struct icmp *Receiver_icmp::get_sent_icmp_header(u_int8_t *icmp_packet) const {
+struct icmp *Receiver_icmp::getSent_icmp_header(u_int8_t *icmp_packet) const {
     u_int8_t *sent_ip_packet = icmp_packet + 8;
     struct ip *sent_ip_header = (struct ip *) sent_ip_packet;
     u_int8_t *sent_icmp_packet = sent_ip_packet + sent_ip_header->ip_hl * 4;

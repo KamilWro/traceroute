@@ -1,6 +1,5 @@
 /* Kamil Breczko (280 990) */
 
-
 #include "traceroute.h"
 
 Traceroute::Traceroute(int pid) : pid(pid) {
@@ -15,11 +14,11 @@ void Traceroute::run(const char *ip_address, shared_ptr<Sender> sender, shared_p
     bool destination = false;
     vector<struct packet> received_packets;
 
-    sender->set_ip_addr(ip_address);
+    sender->setIp_addr(ip_address);
     sender->set_pid(pid);
-    sender->set_sockfd(sockfd);
+    sender->setSockfd(sockfd);
 
-    receiver->set_sockfd(sockfd);
+    receiver->setSockfd(sockfd);
 
     for (int ttl = 1; ttl <= MAX_TTL && !destination; ttl++) {
 

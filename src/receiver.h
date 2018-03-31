@@ -12,8 +12,8 @@ class Receiver {
 
     virtual ~Receiver() {}
 
-    void set_sockfd(int sockfd) {
-        Receiver::sockfd = sockfd;
+    void setSockfd(int sockfd) {
+        this->sockfd = sockfd;
     }
 
 };

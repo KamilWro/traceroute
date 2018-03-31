@@ -14,7 +14,7 @@
 
 class Receiver_icmp : public Receiver {
   private:
-    struct icmp *get_sent_icmp_header(u_int8_t *icmp_packet) const;
+    struct icmp *getSent_icmp_header(u_int8_t *icmp_packet) const;
 
   public:
     ~Receiver_icmp() {};
