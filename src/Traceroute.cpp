@@ -77,7 +77,7 @@ void Traceroute::printRoute(u_int16_t ttl, vector<Packet> receivedPackets, time_
 
     u_int32_t sum_time = 0;
     for (auto packet : receivedPackets)
-        sum_time += std::chrono::duration_cast<std::chrono::milliseconds>(packet.receiptTime - sendingTime).count();
+        sum_time += chrono::duration_cast<chrono::milliseconds>(packet.receiptTime - sendingTime).count();
 
     printf("%ums \n", sum_time / 3);
 }

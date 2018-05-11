@@ -5,26 +5,25 @@
 void Sender::sendPacket(int sockfd, int ttl, u_int16_t sequence) {
     struct icmphdr icmphdr = createIcmpHeader(sequence);
 
-    int set_ttl = setsockopt(sockfd, IPPROTO_IP, IP_TTL, &ttl, sizeof(int));
+    int result = setsockopt(sockfd, IPPROTO_IP, IP_TTL, &ttl, sizeof(int));
 
-    if (set_ttl < 0)
+    if (result < 0)
         throw std::invalid_argument(std::string("setsockopt error: ") + strerror(errno));
 
-    ssize_t bytes_sent = sendto(sockfd, &icmphdr, sizeof(icmphdr), 0, (struct sockaddr *) &recipient,
-                                sizeof(recipient));
-    if (bytes_sent <= 0)
+    ssize_t bytesSent = sendto(sockfd, &icmphdr, sizeof(icmphdr), 0, (struct sockaddr *) &recipient, sizeof(recipient));
+    if (bytesSent <= 0)
         throw std::runtime_error("sento error: Packet was not sent");
 }
 
 struct icmphdr Sender::createIcmpHeader(u_int16_t sequence) {
-    struct icmphdr icmp_header{};
-    icmp_header.type = ICMP_ECHO;
-    icmp_header.code = 0;
-    icmp_header.un.echo.id = pid;
-    icmp_header.un.echo.sequence = sequence;
-    icmp_header.checksum = 0;
-    icmp_header.checksum = computeIcmpChecksum((u_int16_t *) &icmp_header, sizeof(icmp_header));
-    return icmp_header;
+    struct icmphdr icmpHeader{};
+    icmpHeader.type = ICMP_ECHO;
+    icmpHeader.code = 0;
+    icmpHeader.un.echo.id = pid;
+    icmpHeader.un.echo.sequence = sequence;
+    icmpHeader.checksum = 0;
+    icmpHeader.checksum = computeIcmpChecksum((u_int16_t *) &icmpHeader, sizeof(icmpHeader));
+    return icmpHeader;
 }
 
 u_int16_t Sender::computeIcmpChecksum(const void *buff, int length) {
@@ -45,11 +44,11 @@ Sender::Sender(const char *ipAddress, u_int16_t pid) : pid(pid) {
     // Wpisujemy adres odbiorcy do struktury adresowej
     bzero(&recipient, sizeof(recipient));
     recipient.sin_family = AF_INET;
-    int is_address = inet_pton(AF_INET, ipAddress, &recipient.sin_addr);
+    int address = inet_pton(AF_INET, ipAddress, &recipient.sin_addr);
 
-    if (is_address == 0)
+    if (address == 0)
         throw std::invalid_argument("error: incorrect IPv4 address");
 
-    if (is_address == -1)
+    if (address == -1)
         throw std::invalid_argument(std::string("inet_pton error:") + strerror(errno));
 }
