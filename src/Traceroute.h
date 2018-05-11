@@ -9,8 +9,8 @@
 #include <memory>
 #include <unistd.h>
 
-#include "sender_icmp.h"
-#include "receiver_icmp.h"
+#include "Sender.h"
+#include "Receiver.h"
 
 #define MAX_TTL 30
 #define MAX_PACKET_PER_TTL 3
@@ -21,18 +21,17 @@ using namespace std;
 typedef chrono::high_resolution_clock::time_point time_point;
 
 class Traceroute {
-  private:
-    int pid;
+private:
+    u_int16_t pid;
     int sockfd;
-  public:
-    Traceroute(int pid);
+public:
+    Traceroute(u_int16_t pid);
 
-    virtual ~Traceroute();
+    ~Traceroute();
 
-    void run(const char *ip_address, shared_ptr<Sender> sender, shared_ptr<Receiver> receiver);
+    void run(const char *ipAddress);
 
-    void print_route(u_int16_t ttl, vector<struct packet> received_packets, time_point point);
+    void printRoute(u_int16_t ttl, vector<Packet> receivedPackets, time_point sendingTime);
 };
-
 
 #endif

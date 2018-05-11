@@ -1,7 +1,6 @@
 /* Kamil Breczko (280 990) */
 
-#include "traceroute.h"
-#include <unistd.h>
+#include "Traceroute.h"
 
 int main(int argc, const char *argv[]) {
     if (argc != 2) {
@@ -10,12 +9,9 @@ int main(int argc, const char *argv[]) {
     }
 
     try {
-        int pid = getpid();
-        std::shared_ptr<Sender> sender_icmp(new Sender_icmp);
-        std::shared_ptr<Receiver> receiver_icmp(new Receiver_icmp);
-
+        uint16_t pid = getpid();
         Traceroute traceroute(pid);
-        traceroute.run(argv[1], sender_icmp, receiver_icmp);
+        traceroute.run(argv[1]);
     } catch (const exception &e) {
         fprintf(stderr, "%s \n", e.what());
         return -1;
