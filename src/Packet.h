@@ -5,20 +5,21 @@
 
 #include <chrono>
 #include <string>
+#include <utility>
 
 using namespace std;
 
 typedef chrono::high_resolution_clock::time_point time_point;
 
-struct Packet {
+typedef struct packet {
     u_int16_t id;
     u_int16_t sequence;
     string ipAddress;
     time_point receiptTime;
 
-    Packet(u_int16_t id, u_int16_t sequence, const string &ipAddress, time_point receipt_time) :
-            id(id), sequence(sequence), ipAddress(ipAddress), receiptTime(receipt_time) {}
+    packet(u_int16_t id, u_int16_t sequence, string ipAddress, time_point receipt_time) :
+            id(id), sequence(sequence), ipAddress(move(ipAddress)), receiptTime(receipt_time) {}
 
-};
+} Packet;
 
 #endif

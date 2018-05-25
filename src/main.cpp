@@ -4,7 +4,7 @@
 
 int main(int argc, const char *argv[]) {
     if (argc != 2) {
-        fprintf(stderr, "error: incorrect number of arguments \n");
+        cerr << "error: incorrect number of arguments" << endl;
         return -1;
     }
 
@@ -13,7 +13,7 @@ int main(int argc, const char *argv[]) {
         Traceroute traceroute(pid);
         traceroute.run(argv[1]);
     } catch (const exception &e) {
-        fprintf(stderr, "%s \n", e.what());
+        cerr << e.what() << endl;
         return -1;
     }
 

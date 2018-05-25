@@ -10,12 +10,16 @@
 #include <cstring>
 
 #include "Packet.h"
+#include "Sockwrap.h"
 
 class Receiver {
     struct icmp *getMyIcmpHeader(u_int8_t *icmpPacket) const;
 
+    Packet extractICMP(uint8_t *buffer, char *address, time_point receiptTime);
+
 public:
-    struct Packet receivePacket(int sockfd);
+
+    Packet receivePacket(int sockfd);
 };
 
 #endif

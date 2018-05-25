@@ -2,22 +2,19 @@
 
 #include "Traceroute.h"
 
-Traceroute::Traceroute(u_int16_t pid) : pid(pid) {
-    sockfd = socket(AF_INET, SOCK_RAW, IPPROTO_ICMP);
-
-    if (sockfd < 0)
-        throw runtime_error(string("socket error: ") + strerror(errno));
+Traceroute::Traceroute(uint16_t pid) : pid(pid) {
+    sockfd = Socket(AF_INET, SOCK_RAW, IPPROTO_ICMP);
 }
 
 void Traceroute::run(const char *ipAddress) {
-    u_int16_t sequence = 0;
+    uint16_t sequence = 0;
     bool destination = false;
     vector<Packet> receivedPackets;
 
     Sender sender(ipAddress, pid);
     Receiver receiver;
 
-    for (u_int16_t ttl = 1; ttl <= MAX_TTL && !destination; ttl++) {
+    for (uint16_t ttl = 1; ttl <= MAX_TTL && !destination; ttl++) {
 
         for (int i = 0; i < MAX_PACKET_PER_TTL; i++)
             sender.sendPacket(sockfd, ttl, sequence++);
@@ -28,14 +25,11 @@ void Traceroute::run(const char *ipAddress) {
         FD_ZERO(&descriptors);
         FD_SET(sockfd, &descriptors);
         struct timeval tv{};
-        tv.tv_sec = WAITING_TIME;
-        tv.tv_usec = 0;
+        tv.tv_sec = WAITING_TIME_S;
+        tv.tv_usec = WAITING_TIME_US;
 
         while (receivedPackets.size() < MAX_PACKET_PER_TTL) {
-            int ready = select(sockfd + 1, &descriptors, nullptr, nullptr, &tv);
-
-            if (ready < 0)
-                throw runtime_error("select error: waiting for the package in the socket has failed");
+            int ready = Select(sockfd + 1, &descriptors, nullptr, nullptr, &tv);
 
             if (ready == 0)
                 break;
@@ -54,11 +48,11 @@ void Traceroute::run(const char *ipAddress) {
     }
 }
 
-void Traceroute::printRoute(u_int16_t ttl, vector<Packet> receivedPackets, time_point sendingTime) {
-    printf("%2d. ", ttl);
+void Traceroute::printRoute(uint16_t ttl, vector<Packet> receivedPackets, time_point sendingTime) {
+    cout << setw(2) << right << ttl << ". ";
 
     if (receivedPackets.empty()) {
-        printf("* \n");
+        cout << "*" << endl;
         return;
     }
 
@@ -68,10 +62,10 @@ void Traceroute::printRoute(u_int16_t ttl, vector<Packet> receivedPackets, time_
         ip_addresses.insert(packet.ipAddress);
 
     for (const auto &ipAddress : ip_addresses)
-        printf("%-15s ", ipAddress.c_str());
+        cout << setw(15) << left << ipAddress;
 
     if (receivedPackets.size() != MAX_PACKET_PER_TTL) {
-        printf("??? \n");
+        cout << "???" << endl;
         return;
     }
 
@@ -79,9 +73,9 @@ void Traceroute::printRoute(u_int16_t ttl, vector<Packet> receivedPackets, time_
     for (auto packet : receivedPackets)
         sum_time += chrono::duration_cast<chrono::milliseconds>(packet.receiptTime - sendingTime).count();
 
-    printf("%ums \n", sum_time / 3);
+    cout << sum_time / MAX_PACKET_PER_TTL << "ms" << endl;
 }
 
 Traceroute::~Traceroute() {
-    close(sockfd);
+    Close(sockfd);
 }

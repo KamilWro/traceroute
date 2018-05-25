@@ -9,18 +9,20 @@
 #include <cstring>
 #include <stdexcept>
 
+#include "Sockwrap.h"
+
 class Sender {
     struct sockaddr_in recipient;
     uint16_t pid;
 
-    u_int16_t computeIcmpChecksum(const void *buff, int length);
+    uint16_t computeIcmpChecksum(const void *buff, int length);
 
-    struct icmphdr createIcmpHeader(u_int16_t sequence);
+    struct icmphdr createIcmpHeader(uint16_t sequence);
 
 public:
-    Sender(const char *ipAddress, u_int16_t pid);
+    Sender(const char *ipAddress, uint16_t pid);
 
-    void sendPacket(int sockfd, int ttl, u_int16_t sequence);
+    void sendPacket(int sockfd, int ttl, uint16_t sequence);
 
 };
 
